@@ -45,7 +45,7 @@ def fetchEmailData(username, password):
                     if original.is_multipart():
                         for part in original.walk():
                             if (part.get_content_type() == 'text/plain') and (part.get('Content-Disposition') is None):
-                                payout = textProcessing(str(part.get_payload()), 1)
+                                payout = re.findall(r'((?<=[\D])\d+[.]\d\d(?!\d))', str(part.get_payload()))
                                 payouts += payout
                             else:
                                 if(part.get_filename() is not None):
@@ -62,12 +62,6 @@ def fetchEmailData(username, password):
     conn.logout()
     
     return lots, soNumbers, payouts, emailcount
- 
-def textProcessing(text, option):
-     
-    if (option == 1):
-        output = re.findall(r'((?<=[\D])\d+[.]\d\d(?!\d))', text)
-        return output
     
 
          
